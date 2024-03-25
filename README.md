@@ -142,7 +142,7 @@ Suno API has a BSD-3-Clause license, as found in the [LICENSE](https://github.co
 
 ## Changelog
 
-25.04.2022: Initial release
+25.04.2024: Initial release
 
 
 
