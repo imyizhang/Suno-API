@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "suno-api"
+version = "0.0.2"
+description = "Unofficial Suno Python API"
+packages = [
+    {include = "suno"}
+]
+authors = ["Yi ZHANG <yizhang.dev@gmail.com>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+homepage = "https://pypi.org/project/suno-api"
+repository = "https://github.com/imyizhang/suno-api"
+documentation = "https://suno-api.readthedocs.io/en/latest/"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+curl_cffi = "^0.5.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
