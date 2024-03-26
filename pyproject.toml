@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "suno-api"
-version = "0.1.0"
-description = "Unofficial Suno Python API"
+version = "0.1.1"
+description = "Unofficial Python library for Suno AI API: make a song with Suno using v3 🥳"
 packages = [
     {include = "suno"}
 ]
@@ -12,9 +12,15 @@ homepage = "https://pypi.org/project/suno-api"
 repository = "https://github.com/imyizhang/suno-api"
 documentation = "https://suno-api.readthedocs.io/en/latest/"
 
+[tool.poetry.scripts]
+suno = "suno.cli:app"
+
 [tool.poetry.dependencies]
-python = "^3.7"
-curl_cffi = "^0.5.3"
+python = "^3.12"
+curl_cffi = "^0.6.1"
+typer = {extras = ["all"], version = "^0.10.0"}
+fastapi = "^0.110.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
