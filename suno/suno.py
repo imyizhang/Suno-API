@@ -3,7 +3,9 @@ import os
 COOKIE = os.getenv("SUNO_COOKIE", "")
 
 import json
+import pathlib
 import random
+import re
 import time
 from typing import List, Optional
 
@@ -152,19 +154,31 @@ class Songs(APIResource):
         timeout = 600
         # TODO: refactor this
         if custom:
-            payload = {
-                "mv": "chirp-v3-0",
-                "tags": tags,
-                "prompt": prompt,
-                "make_instrumental": instrumental,
-            }
+            # create a song without lyrics
+            if instrumental:
+                payload = {
+                    "mv": "chirp-v3-0",
+                    "tags": prompt,  # style of music
+                    "prompt": "",
+                    "make_instrumental": instrumental,
+                }
+            # create a song with lyrics
+            else:
+                payload = {
+                    "mv": "chirp-v3-0",
+                    "tags": tags,  # style of music
+                    "prompt": prompt,  # lyrics
+                    "make_instrumental": instrumental,
+                }
         else:
             payload = {
                 "mv": "chirp-v3-0",
+                "prompt": "",
                 "gpt_description_prompt": prompt,
                 "make_instrumental": instrumental,
             }
-        response = self.request("POST", url, data=json.dumps(payload))
+        data = json.dumps(payload)
+        response = self.request("POST", url, data=data)
         if not response.ok:
             raise Exception(f"failed to generate songs: {response.status_code}")
         data = response.json()
@@ -190,10 +204,51 @@ class Songs(APIResource):
 
     def _is_ready(self, id: str) -> bool:
         song = self._get(id)
-        return song.audio_url != ""
+        return (song.audio_url != "") and (song.video_url != "")
 
     def list(self) -> List[Song]:
         return self._client.get_songs()
 
     def get(self, id: str) -> Song:
         return self._client.get_song(id)
+
+
+def download(
+    song: str | Song,
+    root: str = ".",
+) -> None:
+    id = _get_id(song)
+    print(f"id: {id}")
+    url = _audio_url(id)
+    print(f"audio url: {url}")
+    response = requests.request("GET", url)
+    if not response.ok:
+        raise Exception(
+            f"failed to download from audio url: {response.status_code}"
+        )
+    file = _audio_file(id, root)
+    with open(file, "wb") as f:
+        f.write(response.content)
+    print(f"audio file: {file}")
+
+
+def _get_id(song: str | Song) -> str:
+    if isinstance(song, Song):
+        return song.id
+    if not isinstance(song, str):
+        raise TypeError
+    id_pattern = r"[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
+    match = re.search(id_pattern, song)
+    if match:
+        return match.group(0)
+    raise ValueError
+
+
+def _audio_url(id: str) -> str:
+    return f"https://cdn1.suno.ai/{id}.mp3"
+
+
+def _audio_file(id: str, root: str = ".") -> str:
+    output_dir = pathlib.Path(root) / ".suno"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    return output_dir / f"suno-{id}.mp3"

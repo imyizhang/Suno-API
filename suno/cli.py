@@ -6,7 +6,7 @@ import suno
 import typer
 from rich import print
 
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 COOKIE = os.getenv("SUNO_COOKIE")
 # HOST = "127.0.0.1"
 # PORT = 8000
@@ -105,6 +105,11 @@ def get(id: str) -> None:
     #     raise Exception(f"failed to get song: {response.status_code}")
     # data = response.json()
     print(data)
+
+
+@app_songs.command(help="Download a song on Suno.")
+def download(song: str, root: str = ".") -> None:
+    suno.download(song, root=root)
 
 
 @app_credits.command(help="Display your remaining credits.")

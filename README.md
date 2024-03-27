@@ -10,6 +10,7 @@
 
 - [x] Create a Python client for Suno AI
 - [x] Utilize Chirp v3 model to make a song by default
+- [ ] Continue from a song
 - [x] Make a song using CLI
 - [x] Deploy a REST API available at [http://http://127.0.0.1/:8000](http://localhost:8000/)
 - [ ] Deploy with Docker
@@ -100,6 +101,14 @@ credits = client.get_credits()
 
 
 
+### Download a clip on Suno AI
+
+```python
+suno.download("your-clip-id-here")
+```
+
+
+
 ## Documentation
 
 ### Python Library
@@ -174,10 +183,10 @@ Create songs.
 
 **Parameters:**
 
-- **prompt** (`str`): Prompt used to create the song, description or lyrics of the song to be created.
+- **prompt** (`str`): Prompt used to create the song, song, description, lyrics, or style of music.
 - **custom** (`bool`, optional): Whether to create the song in custom mode. Defaults to `False`.
 - **tags** (`str`, optional): Tags indicating musical style of the song to be created. Defaults to `""`.
-- **instrumental** (`bool`, optional): . Defaults to `False`.
+- **instrumental** (`bool`, optional): Whether to create the song without lyrics. Defaults to `False`.
 
 **Returns:**
 
@@ -216,6 +225,19 @@ Get all credits left.
 **Returns:**
 
 (`int`): Remaining credits in the logged-in account.
+
+
+
+#### `suno.download`
+
+##### `suno.download(song: str | suno.Song, root: str)`
+
+Download a song.
+
+**Parameters:**
+
+- **song** (`str | suno.Song`): ID indicating a song, URL linked to a song or an `suno.Song` object.
+- **root** (`str`): Root directory to store the downloaded songs.
 
 
 
@@ -474,6 +496,13 @@ Thanks for your interest in contributing to **Suno AI API**! Please feel free to
 
 
 ## Changelog
+
+**Suno AI API 0.1.2**
+
+* Add a function to download any song on Suno AI
+* Fix bugs for song generation
+
+
 
 **Suno AI API 0.1.1**
 

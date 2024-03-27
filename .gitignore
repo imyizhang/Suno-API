@@ -15,5 +15,8 @@ docs/build/
 .ipynb_checkpoints/
 *.ipynb
 
+# Suno
+.suno/
+
 # Desktop Services Store
 .DS_Store
