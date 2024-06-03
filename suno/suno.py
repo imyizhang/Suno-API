@@ -79,7 +79,7 @@ class Suno(Client):
         self.songs = Songs(self)
 
     def _get_sid(self) -> str:
-        url = "https://clerk.suno.ai/v1/client?_clerk_js_version=4.70.5"
+        url = "https://clerk.suno.com/v1/client?_clerk_js_version=4.73.2"
         response = super().request("GET", url)
         if not response.ok:
             raise Exception(f"failed to get SID: {response.status_code}")
@@ -87,7 +87,7 @@ class Suno(Client):
         return data.get("response").get("last_active_session_id")
 
     def _get_jwt(self) -> str:
-        url = f"https://clerk.suno.ai/v1/client/sessions/{self._sid}/tokens/api?_clerk_js_version=4.70.5"
+        url = f"https://clerk.suno.com/v1/client/sessions/{self._sid}/tokens/api?_clerk_js_version=4.73.2"
         response = super().request("POST", url)
         if not response.ok:
             raise Exception(f"failed to get JWT: {response.status_code}")
